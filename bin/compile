@@ -9,6 +9,7 @@ APACHE_VERSION="2.2.22"
 APACHE_PATH="apache"
 PHP_VERSION="5.3.10"
 PHP_PATH="php"
+DRUSH_VERSION="5.8.0"
 
 BIN_DIR=$(dirname $0)
 BUILD_DIR=$1
@@ -20,13 +21,15 @@ shopt -s dotglob
 
 cd $BUILD_DIR
 
-# move app things to www
-mkdir -p $CACHE_DIR/www
-mv * $CACHE_DIR/www
-mv $CACHE_DIR/www .
+pear channel-discover pear.drush.org
+pear install drush/drush
+pear install drush/drush-$DRUSH_VERSION
 
-# Set permissions on settings.php
-chmod 444 $BUILD_DIR/www/sites/default/settings.php
+# Check if drupal install profile
+if [ -f build-*.make] && [ ! -d www ]; then
+  drush make build-test.make www
+  drush si --db-url=$CLEARDB_DATABASE_URL --yes
+fi
 
 # keep Procfile
 if [ -f www/Procfile ]; then
