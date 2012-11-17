@@ -25,6 +25,9 @@ mkdir -p $CACHE_DIR/www
 mv * $CACHE_DIR/www
 mv $CACHE_DIR/www .
 
+# Set permissions on settings.php
+chmod 444 $BUILD_DIR/www/sites/default/settings.php
+
 # keep Procfile
 if [ -f www/Procfile ]; then
   mv www/Procfile .
