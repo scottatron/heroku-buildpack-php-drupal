@@ -32,11 +32,12 @@ curl --silent --max-time 60 --location "$PHP_URL" | tar xz
 DRUSH_URL="http://ftp.drupal.org/files/projects/drush-7.x-$DRUSH_VERSION.tar.gz"
 echo "-----> Bundling Drush version $DRUSH_VERSION"
 curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
+export DRUSH_BIN=$BUILD_PATH/drush/drush
 
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
-  drush make build-test.make www
-  ./drush/drush site-install --db-url=$CLEARDB_DATABASE_URL --yes
+  $DRUSH_BIN make build-test.make www
+  $DRUSH_BIN site-install --db-url=$CLEARDB_DATABASE_URL --yes
 fi
 
 # keep Procfile
