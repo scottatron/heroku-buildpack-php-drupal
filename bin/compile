@@ -21,6 +21,9 @@ shopt -s dotglob
 
 cd $BUILD_DIR
 
+./php/bin/pear channel-discover pear.drush.org
+./php/bin/pear drush/drush-$DRUSH_VERSION.0
+
 APACHE_URL="https://s3.amazonaws.com/php-lp/apache-$APACHE_VERSION.tar.gz"
 echo "-----> Bundling Apache version $APACHE_VERSION"
 curl --silent --max-time 60 --location "$APACHE_URL" | tar xz
@@ -38,7 +41,13 @@ export DRUSH_BIN=$BUILD_DIR/drush/drush
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
   LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php make build-test.make www --php=php/bin/php
-  LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php site-install --db-url=$CLEARDB_DATABASE_URL --yes --root=www
+  cp www/sites/default/default.settings.php www/sites/default/settings.php
+  echo "-----> Appending settings.php snippets..."
+  for f in tmp/snippets/*.settings.php
+  do
+    # Concatenate newline and snippet, then append to settings.php
+    echo "" | cat - $f | tee -a www/sites/default/settings.php > /dev/null
+  done
 fi
 
 # keep Procfile
