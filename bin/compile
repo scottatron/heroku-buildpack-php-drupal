@@ -21,6 +21,9 @@ shopt -s dotglob
 
 cd $BUILD_DIR
 
+bash $BUILD_DIR/php/bin/pear channel-discover pear.drush.org
+bash $BUILD_DIR/php/bin/pear install drush/drush-$DRUSH_VERSION.0
+
 APACHE_URL="https://s3.amazonaws.com/php-lp/apache-$APACHE_VERSION.tar.gz"
 echo "-----> Bundling Apache version $APACHE_VERSION"
 curl --silent --max-time 60 --location "$APACHE_URL" | tar xz
@@ -28,6 +31,7 @@ curl --silent --max-time 60 --location "$APACHE_URL" | tar xz
 PHP_URL="https://s3.amazonaws.com/php-lp/php-$PHP_VERSION.tar.gz"
 echo "-----> Bundling PHP version $PHP_VERSION"
 curl --silent --max-time 60 --location "$PHP_URL" | tar xz
+export PHP_BIN=$BUILD_DIR/php/bin/php
 
 DRUSH_URL="http://ftp.drupal.org/files/projects/drush-7.x-$DRUSH_VERSION.tar.gz"
 echo "-----> Bundling Drush version $DRUSH_VERSION"
@@ -36,8 +40,8 @@ export DRUSH_BIN=$BUILD_DIR/drush/drush
 
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
-  $DRUSH_BIN make build-test.make www
-  $DRUSH_BIN site-install --db-url=$CLEARDB_DATABASE_URL --yes
+  . $PHP_BIN $DRUSH_BIN make build-test.make www
+  . $PHP_BIN $DRUSH_BIN site-install --db-url=$CLEARDB_DATABASE_URL --yes
 fi
 
 # keep Procfile
