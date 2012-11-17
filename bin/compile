@@ -21,6 +21,11 @@ shopt -s dotglob
 
 cd $BUILD_DIR
 
+# pear
+apt-get install php5-dev php-pear
+pear config-set php_dir /app/php
+
+#drush
 pear channel-discover pear.drush.org
 pear install drush/drush
 pear install drush/drush-$DRUSH_VERSION
