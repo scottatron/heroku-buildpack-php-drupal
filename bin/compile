@@ -21,9 +21,6 @@ shopt -s dotglob
 
 cd $BUILD_DIR
 
-bash $BUILD_DIR/php/bin/pear channel-discover pear.drush.org
-bash $BUILD_DIR/php/bin/pear install drush/drush-$DRUSH_VERSION.0
-
 APACHE_URL="https://s3.amazonaws.com/php-lp/apache-$APACHE_VERSION.tar.gz"
 echo "-----> Bundling Apache version $APACHE_VERSION"
 curl --silent --max-time 60 --location "$APACHE_URL" | tar xz
