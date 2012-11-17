@@ -34,7 +34,7 @@ echo "-----> Bundling Drush version $DRUSH_VERSION"
 curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
 
 # Check if drupal install profile
-if [ -f build-*.make] && [ ! -d www ]; then
+if [ -f build-*.make ] && [ ! -d www ]; then
   drush make build-test.make www
   ./drush/drush site-install --db-url=$CLEARDB_DATABASE_URL --yes
 fi
