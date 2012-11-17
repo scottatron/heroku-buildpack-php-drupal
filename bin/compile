@@ -37,8 +37,8 @@ export DRUSH_BIN=$BUILD_DIR/drush/drush
 
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
-  ./php/bin/php -f php/lib/php/drush/drush.php make build-test.make www
-  ./php/bin/php -f php/lib/php/drush/drush.php site-install --db-url=$CLEARDB_DATABASE_URL --yes
+  LD_LIBRARY_PATH=php/ext ./php/bin/php -f php/lib/php/drush/drush.php make build-test.make www
+  LD_LIBRARY_PATH=php/ext ./php/bin/php -f php/lib/php/drush/drush.php site-install --db-url=$CLEARDB_DATABASE_URL --yes
 fi
 
 # keep Procfile
