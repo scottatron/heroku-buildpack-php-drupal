@@ -37,7 +37,7 @@ export DRUSH_BIN=$BUILD_DIR/drush/drush
 
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
-  LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php make build-test.make www
+  LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php make build-test.make www --php=php/bin/php
   LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php site-install --db-url=$CLEARDB_DATABASE_URL --yes
 fi
 
