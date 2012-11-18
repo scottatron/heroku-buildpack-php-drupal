@@ -21,9 +21,6 @@ shopt -s dotglob
 
 cd $BUILD_DIR
 
-./php/bin/php -f php/lib/php/pearcmd.php channel-discover pear.drush.org
-./php/bin/php -f php/lib/php/pearcmd.php drush/drush-$DRUSH_VERSION.0
-
 APACHE_URL="https://s3.amazonaws.com/php-lp/apache-$APACHE_VERSION.tar.gz"
 echo "-----> Bundling Apache version $APACHE_VERSION"
 curl --silent --max-time 60 --location "$APACHE_URL" | tar xz
@@ -37,6 +34,9 @@ DRUSH_URL="http://ftp.drupal.org/files/projects/drush-7.x-$DRUSH_VERSION.tar.gz"
 echo "-----> Bundling Drush version $DRUSH_VERSION"
 curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
 export DRUSH_BIN=$BUILD_DIR/drush/drush
+
+./php/bin/pear channel-discover pear.drush.org
+./php/bin/pear drush/drush-$DRUSH_VERSION.0
 
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
