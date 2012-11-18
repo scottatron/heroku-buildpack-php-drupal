@@ -35,8 +35,8 @@ echo "-----> Bundling Drush version $DRUSH_VERSION"
 curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
 export DRUSH_BIN=$BUILD_DIR/drush/drush
 
-./php/bin/pear channel-discover pear.drush.org
-./php/bin/pear drush/drush-$DRUSH_VERSION.0
+./php/bin/php -f ./php/lib/php/pearcmd.php channel-discover pear.drush.org
+./php/bin/php -f ./php/lib/php/pearcmd.php drush/drush-$DRUSH_VERSION.0
 
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
