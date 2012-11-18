@@ -48,7 +48,7 @@ ln -s /app/php/bin/php bin/php
 
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
-  LD_LIBRARY_PATH=php/ext ./bin/php -f drush/drush.php make build-test.make www --php=php/bin/php
+  LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php make build-test.make www --php=php/bin/php
   cp www/sites/default/default.settings.php www/sites/default/settings.php
   echo "-----> Appending settings.php snippets..."
   for f in tmp/snippets/*.settings.php
@@ -57,9 +57,9 @@ if [ -f build-*.make ] && [ ! -d www ]; then
     echo "" | cat - $f | tee -a www/sites/default/settings.php > /dev/null
   done
   echo "-----> Dropping all tables..."
-  LD_LIBRARY_PATH=php/ext ./bin/php -f drush/drush.php scr tmp/scripts/drop-all-tables.php
+  LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php scr tmp/scripts/drop-all-tables.php
   cd www
-  LD_LIBRARY_PATH=../php/ext ./../bin/php -f ../drush/drush.php site-install minimal --yes --account-pass=admin
+  LD_LIBRARY_PATH=../php/ext ./../php/bin/php -f ../drush/drush.php site-install minimal --yes --account-pass=admin
   cd ..
 fi
 
