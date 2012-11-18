@@ -49,13 +49,13 @@ ln -s /app/php/bin/php bin/php
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
   LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php make build-test.make www --php=php/bin/php
-  #cp www/sites/default/default.settings.php www/sites/default/settings.php
-  #echo "-----> Appending settings.php snippets..."
-  #for f in tmp/snippets/*.settings.php
-  #do
-  #  # Concatenate newline and snippet, then append to settings.php
-  #  echo "" | cat - $f | tee -a www/sites/default/settings.php > /dev/null
-  #done
+  cp www/sites/default/default.settings.php www/sites/default/settings.php
+  echo "-----> Appending settings.php snippets..."
+  for f in tmp/snippets/*.settings.php
+  do
+    # Concatenate newline and snippet, then append to settings.php
+    echo "" | cat - $f | tee -a www/sites/default/settings.php > /dev/null
+  done
 fi
 
 cat >>boot.sh <<EOF
