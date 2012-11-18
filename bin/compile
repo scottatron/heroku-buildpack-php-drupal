@@ -56,9 +56,9 @@ if [ -f build-*.make ] && [ ! -d www ]; then
     # Concatenate newline and snippet, then append to settings.php
     echo "" | cat - $f | tee -a www/sites/default/settings.php > /dev/null
   done
-  echo "-----> Dropping all tables..."
-  LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php scr tmp/scripts/drop-all-tables.php
   cd www
+  echo "-----> Dropping all tables..."
+  LD_LIBRARY_PATH=../php/ext ./../php/bin/php -f ../drush/drush.php scr ../tmp/scripts/drop-all-tables.php
   LD_LIBRARY_PATH=../php/ext ./../php/bin/php -f ../drush/drush.php site-install minimal --yes --account-pass=admin
   cd ..
 fi
