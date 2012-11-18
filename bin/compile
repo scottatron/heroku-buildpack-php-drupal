@@ -21,8 +21,8 @@ shopt -s dotglob
 
 cd $BUILD_DIR
 
-./php/bin/pear channel-discover pear.drush.org
-./php/bin/pear drush/drush-$DRUSH_VERSION.0
+./php/bin/php -f php/lib/php/pearcmd.php channel-discover pear.drush.org
+./php/bin/php -f php/lib/php/pearcmd.php drush/drush-$DRUSH_VERSION.0
 
 APACHE_URL="https://s3.amazonaws.com/php-lp/apache-$APACHE_VERSION.tar.gz"
 echo "-----> Bundling Apache version $APACHE_VERSION"
