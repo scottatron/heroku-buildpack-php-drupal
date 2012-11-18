@@ -39,7 +39,7 @@ export LD_LIBRARY_PATH=php/ext
 
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
-  . $BUILD_DIR/php/bin/php -f $BUILD_DIR/drush/drush.php make $BUILD_DIR/build-test.make $BUILD_DIR/www --php=php/bin/php
+  ./php/bin/php -f drush/drush.php make build-test.make www --php=php/bin/php
   cp www/sites/default/default.settings.php www/sites/default/settings.php
   echo "-----> Appending settings.php snippets..."
   for f in tmp/snippets/*.settings.php
