@@ -35,12 +35,11 @@ echo "-----> Bundling Drush version $DRUSH_VERSION"
 curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
 export DRUSH_BIN=$BUILD_DIR/drush/drush
 
-LD_LIBRARY_PATH=php/ext ./php/bin/php -f ./php/lib/php/pearcmd.php channel-discover pear.drush.org
-LD_LIBRARY_PATH=php/ext ./php/bin/php -f ./php/lib/php/pearcmd.php drush/drush-$DRUSH_VERSION.0
+export LD_LIBRARY_PATH=php/ext
 
 # Check if drupal install profile
 if [ -f build-*.make ] && [ ! -d www ]; then
-  LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php make build-test.make www --php=php/bin/php
+  . $BUILD_DIR/php/bin/php -f $BUILD_DIR/drush/drush.php make $BUILD_DIR/build-test.make $BUILD_DIR/www --php=php/bin/php
   cp www/sites/default/default.settings.php www/sites/default/settings.php
   echo "-----> Appending settings.php snippets..."
   for f in tmp/snippets/*.settings.php
