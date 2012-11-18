@@ -58,7 +58,7 @@ if [ -f build-*.make ] && [ ! -d www ]; then
   done
   cd www
   echo "-----> Dropping all tables..."
-  LD_LIBRARY_PATH=../php/ext ./../php/bin/php -f ../drush/drush.php scr ../tmp/scripts/drop-all-tables.php
+  LD_LIBRARY_PATH=../php/ext ./../php/bin/php -f ../drush/drush.php scr drop-all-tables --script-path=../tmp/scripts
   LD_LIBRARY_PATH=../php/ext ./../php/bin/php -f ../drush/drush.php site-install minimal --yes --account-pass=admin
   cd ..
 fi
