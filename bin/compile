@@ -21,6 +21,11 @@ shopt -s dotglob
 
 cd $BUILD_DIR
 
+# keep Procfile
+if [ -f www/Procfile ]; then
+  mv www/Procfile .
+fi
+
 APACHE_URL="https://s3.amazonaws.com/php-lp/apache-$APACHE_VERSION.tar.gz"
 echo "-----> Bundling Apache version $APACHE_VERSION"
 curl --silent --max-time 60 --location "$APACHE_URL" | tar xz
@@ -28,31 +33,10 @@ curl --silent --max-time 60 --location "$APACHE_URL" | tar xz
 PHP_URL="https://s3.amazonaws.com/php-lp/php-$PHP_VERSION.tar.gz"
 echo "-----> Bundling PHP version $PHP_VERSION"
 curl --silent --max-time 60 --location "$PHP_URL" | tar xz
-export PHP_BIN=$BUILD_DIR/php/bin/php
 
 DRUSH_URL="http://ftp.drupal.org/files/projects/drush-7.x-$DRUSH_VERSION.tar.gz"
 echo "-----> Bundling Drush version $DRUSH_VERSION"
 curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
-export DRUSH_BIN=$BUILD_DIR/drush/drush
-
-export LD_LIBRARY_PATH=php/ext
-
-# Check if drupal install profile
-if [ -f build-*.make ] && [ ! -d www ]; then
-  ./php/bin/php -f drush/drush.php make build-test.make www --php=php/bin/php
-  cp www/sites/default/default.settings.php www/sites/default/settings.php
-  echo "-----> Appending settings.php snippets..."
-  for f in tmp/snippets/*.settings.php
-  do
-    # Concatenate newline and snippet, then append to settings.php
-    echo "" | cat - $f | tee -a www/sites/default/settings.php > /dev/null
-  done
-fi
-
-# keep Procfile
-if [ -f www/Procfile ]; then
-  mv www/Procfile .
-fi
 
 # update config files
 cp $LP_DIR/conf/httpd.conf $APACHE_PATH/conf
@@ -61,6 +45,18 @@ cp $LP_DIR/conf/php.ini php
 # make php available on bin
 mkdir -p bin
 ln -s /app/php/bin/php bin/php
+
+# Check if drupal install profile
+if [ -f build-*.make ] && [ ! -d www ]; then
+  LD_LIBRARY_PATH=php/ext ./php/bin/php -f drush/drush.php make build-test.make www --php=php/bin/php
+  #cp www/sites/default/default.settings.php www/sites/default/settings.php
+  #echo "-----> Appending settings.php snippets..."
+  #for f in tmp/snippets/*.settings.php
+  #do
+  #  # Concatenate newline and snippet, then append to settings.php
+  #  echo "" | cat - $f | tee -a www/sites/default/settings.php > /dev/null
+  #done
+fi
 
 cat >>boot.sh <<EOF
 for var in \`env|cut -f1 -d=\`; do
