@@ -53,8 +53,8 @@ mkdir -p bin
 ln -s /app/php/bin/php bin/php
 
 # Check if drupal install profile
-if [ -f build-*.make ] && [ ! -d www ]; then
-  drush make build-test.make www --prepare-install
+if [ -f profile/build-*.make ] && [ ! -d www ]; then
+  drush make profile/build-*.make www --prepare-install
   echo "-----> Appending settings.php snippets..."
   for f in profile/tmp/snippets/*.settings.php
   do
