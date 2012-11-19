@@ -3,6 +3,8 @@
 
 cat <<EOF
 ---
+addons:
+  - cleardb:ignite
 default_process_types:
   web: sh boot.sh
 EOF
