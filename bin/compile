@@ -42,7 +42,8 @@ curl --silent --max-time 60 --location "$PHP_URL" | tar xz
 DRUSH_URL="http://ftp.drupal.org/files/projects/drush-7.x-$DRUSH_VERSION.tar.gz"
 echo "-----> Bundling Drush version $DRUSH_VERSION"
 curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
-alias drush="LD_LIBRARY_PATH=$PWD/php/ext $PWD/php/bin/php -f $PWD/drush/drush.php -- --php=$PWD/php/bin/php"
+export LD_LIBRARY_PATH=$PWD/php/ext
+export DRUSH_BIN="$PWD/php/bin/php -f $PWD/drush/drush.php -- --php=$PWD/php/bin/php"
 
 # update config files
 cp $LP_DIR/conf/httpd.conf $APACHE_PATH/conf
@@ -54,7 +55,7 @@ ln -s /app/php/bin/php bin/php
 
 # Check if drupal install profile
 if [ -f profile/build-*.make ] && [ ! -d www ]; then
-  drush make profile/build-*.make www --prepare-install
+  $DRUSH_BIN make profile/build-*.make www --prepare-install
   echo "-----> Appending settings.php snippets..."
   for f in profile/tmp/snippets/*.settings.php
   do
