@@ -42,8 +42,9 @@ curl --silent --max-time 60 --location "$PHP_URL" | tar xz
 DRUSH_URL="http://ftp.drupal.org/files/projects/drush-7.x-$DRUSH_VERSION.tar.gz"
 echo "-----> Bundling Drush version $DRUSH_VERSION"
 curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
+export PATH=$PWD/bin:$PATH
 export LD_LIBRARY_PATH=$PWD/php/ext
-export DRUSH_BIN="$PWD/php/bin/php -f $PWD/drush/drush.php -- --php=$PWD/php/bin/php"
+export DRUSH_BIN="php -f $PWD/drush/drush.php --"
 
 # update config files
 cp $LP_DIR/conf/httpd.conf $APACHE_PATH/conf
