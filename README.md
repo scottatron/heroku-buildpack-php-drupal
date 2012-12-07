@@ -1,7 +1,18 @@
-Apache+PHP build pack
+Apache+PHP build pack (Drupal Edition)
 ========================
 
 This is a build pack bundling PHP and Apache for Heroku apps.
+
+It has been customized to install Drush and the intention is to build a Drupal site from an install profile following the [Drupal.org distro package conventions](http://drupal.org/node/1476014). I have a [blog post that's a work in progress](https://github.com/patcon/patcon.github.com/blob/master/_posts/2012-11-16-deploying-drupal-install-profiles-to-heroku.md), if you're looking for a bit more context.
+
+Heroku supports many add-ons, all of which can be activated from the command-line. This makes it totally simple to take advantage of killer new tools without investing in infrastructure. Some of the options include:
+
+- [MySQL](https://addons.heroku.com/cleardb)
+- [Memcache](https://addons.heroku.com/memcachier)
+- [Solr](https://addons.heroku.com/websolr)
+- [NewRelic](https://addons.heroku.com/newrelic) (monitoring)
+- [Blitz](https://addons.heroku.com/blitz) (load-testing)
+- [Tons more!](https://addons.heroku.com/)
 
 Configuration
 -------------
