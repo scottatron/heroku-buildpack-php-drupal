@@ -57,11 +57,6 @@ DRUSH_URL="http://ftp.drupal.org/files/projects/drush-7.x-$DRUSH_VERSION.tar.gz"
 echo "-----> Bundling Drush version $DRUSH_VERSION"
 curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
 
-export PATH="${PATH}:${BUILD_DIR}/php/bin"
-export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${BUILD_DIR}/php/ext:${BUILD_DIR}/vendor/mcrypt/lib"
-if [[ -z "$_DEBUG" ]]; then echo "-----> LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}"; fi
-export DRUSH_BIN="php -f ${BUILD_DIR}/drush/drush.php -- --php=${BUILD_DIR}/php/bin/php"
-
 # update config files
 cp $LP_DIR/conf/httpd.conf $APACHE_PATH/conf
 cp $LP_DIR/conf/php.ini php
@@ -69,6 +64,13 @@ cp $LP_DIR/conf/php.ini php
 # make php available on bin
 mkdir -p bin
 ln -fs /app/php/bin/php bin/php
+
+export PATH="${PATH}:${BUILD_DIR}/php/bin"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${BUILD_DIR}/php/ext:${BUILD_DIR}/vendor/mcrypt/lib"
+export PHP_INI_SCAN_DIR="/app/www"
+
+if [[ -z "$_DEBUG" ]]; then echo "-----> LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}"; fi
+export DRUSH_BIN="php -f ${BUILD_DIR}/drush/drush.php -- --php=${BUILD_DIR}/php/bin/php"
 
 # Check if drupal install profile
 if [ -f $BUILD_DIR/profile/build-*.make ] && [ ! -d $BUILD_DIR/www ]; then
