@@ -59,6 +59,7 @@ curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
 
 export PATH="${PATH}:${BUILD_DIR}/php/bin"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${BUILD_DIR}/php/ext:${BUILD_DIR}/vendor/mycrypt/lib"
+if [[ -z "$_DEBUG" ]]; then echo "-----> LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}"; fi
 export DRUSH_BIN="php -f ${BUILD_DIR}/drush/drush.php -- --php=${BUILD_DIR}/php/bin/php"
 
 # update config files
