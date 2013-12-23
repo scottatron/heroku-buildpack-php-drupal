@@ -32,13 +32,13 @@ shopt -s dotglob
 cd $BUILD_DIR
 
 # move app things to www
-mkdir -p $CACHE_DIR/www
-mv * $CACHE_DIR/www
-mv $CACHE_DIR/www .
+mkdir -p $CACHE_DIR/profile
+mv * $CACHE_DIR/profile
+mv $CACHE_DIR/profile .
 
 # keep Procfile
-if [ -f www/Procfile ]; then
-  mv www/Procfile .
+if [ -f $CACHE_DIR/profile/Procfile ]; then
+  mv $CACHE_DIR/profile/Procfile .
 fi
 
 MCRYPT_URL="https://heroku-buildpack-php.s3.amazonaws.com/mcrypt-""$MCRYPT_VERSION""$heroku_rev"".tar.gz"
