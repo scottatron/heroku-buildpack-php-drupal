@@ -31,6 +31,16 @@ shopt -s dotglob
 
 cd $BUILD_DIR
 
+# move app things to www
+mkdir -p $CACHE_DIR/www
+mv * $CACHE_DIR/www
+mv $CACHE_DIR/www .
+
+# keep Procfile
+if [ -f www/Procfile ]; then
+  mv www/Procfile .
+fi
+
 MCRYPT_URL="https://heroku-buildpack-php.s3.amazonaws.com/mcrypt-""$MCRYPT_VERSION""$heroku_rev"".tar.gz"
 echo "-----> Bundling mcrypt version $MCRYPT_VERSION"
 curl --silent --max-time 60 --location "$MCRYPT_URL" | tar xz
@@ -46,8 +56,8 @@ curl --silent --max-time 60 --location "$PHP_URL" | tar xz
 DRUSH_URL="http://ftp.drupal.org/files/projects/drush-7.x-$DRUSH_VERSION.tar.gz"
 echo "-----> Bundling Drush version $DRUSH_VERSION"
 curl --silent --max-time 60 --location "$DRUSH_URL" | tar xz
-# export LD_LIBRARY_PATH=/app/php/lib/php
-export DRUSH_BIN="/app/php/bin/php -f $PWD/drush/drush.php -- --php=/app/php/bin/php"
+export LD_LIBRARY_PATH=/app/php/lib/php
+export DRUSH_BIN="/app/bin/php -f /app/drush/drush.php -- --php=/app/bin/php"
 
 # update config files
 cp $LP_DIR/conf/httpd.conf $APACHE_PATH/conf
@@ -55,7 +65,7 @@ cp $LP_DIR/conf/php.ini php
 
 # make php available on bin
 mkdir -p bin
-ln -s /app/php/bin/php bin/php
+ln -fs /app/php/bin/php bin/php
 
 # Check if drupal install profile
 if [ -f $BUILD_DIR/build-*.make ] && [ ! -d www ]; then
@@ -76,7 +86,7 @@ touch /app/apache/logs/error_log
 touch /app/apache/logs/access_log
 tail -F /app/apache/logs/error_log &
 tail -F /app/apache/logs/access_log &
-export LD_LIBRARY_PATH=/app/php/ext
+export LD_LIBRARY_PATH=/app/php/lib/php
 export PHP_INI_SCAN_DIR=/app/www
 echo "Launching apache"
 exec /app/apache/bin/httpd -DNO_DETACH
