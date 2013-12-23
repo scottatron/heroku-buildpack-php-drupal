@@ -68,13 +68,13 @@ mkdir -p bin
 ln -fs /app/php/bin/php bin/php
 
 # Check if drupal install profile
-if [ -f $BUILD_DIR/build-*.make ] && [ ! -d www ]; then
-  $DRUSH_BIN make $BUILD_DIR/build-*.make www --prepare-install
+if [ -f $BUILD_DIR/profile/build-*.make ] && [ ! -d $BUILD_DIR/www ]; then
+  $DRUSH_BIN make $BUILD_DIR/profile/build-*.make $BUILD_DIR/www --prepare-install
   echo "-----> Appending settings.php snippets..."
-  for f in $BUILD_DIR/config/*.settings.php
+  for f in $BUILD_DIR/profile/config/*.settings.php
   do
     # Concatenate newline and snippet, then append to settings.php
-    echo "" | cat - $f | tee -a www/sites/default/settings.php > /dev/null
+    echo "" | cat - $f | tee -a $BUILD_DIR/www/sites/default/settings.php > /dev/null
   done
 fi
 
