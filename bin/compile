@@ -13,23 +13,15 @@ DRUSH_VERSION="5.8"
 
 BIN_DIR=$(dirname $0)
 BUILD_DIR=$1
+if [[ -z "$_DEBUG" ]]; then echo "-----> BUILD_DIR: $BUILD_DIR"
 CACHE_DIR=$2
+if [[ -z "$_DEBUG" ]]; then echo "-----> CACHE_DIR: $BUILD_DIR"
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
 # include .files when moving things around
 shopt -s dotglob
 
 cd $BUILD_DIR
-
-# move app things to www
-mkdir -p $CACHE_DIR/profile
-mv * $CACHE_DIR/profile
-mv $CACHE_DIR/profile .
-
-# keep Procfile
-if [ -f profile/Procfile ]; then
-  mv profile/Procfile .
-fi
 
 APACHE_URL="https://s3.amazonaws.com/php-lp/apache-$APACHE_VERSION.tar.gz"
 echo "-----> Bundling Apache version $APACHE_VERSION"
@@ -54,10 +46,10 @@ mkdir -p bin
 ln -s /app/php/bin/php bin/php
 
 # Check if drupal install profile
-if [ -f profile/build-*.make ] && [ ! -d www ]; then
-  $DRUSH_BIN make profile/build-*.make www --prepare-install
+if [ -f $BUILD_DIR/build-*.make ] && [ ! -d www ]; then
+  $DRUSH_BIN make $BUILD_DIR/build-*.make www --prepare-install
   echo "-----> Appending settings.php snippets..."
-  for f in profile/tmp/snippets/*.settings.php
+  for f in $BUILD_DIR/config/*.settings.php
   do
     # Concatenate newline and snippet, then append to settings.php
     echo "" | cat - $f | tee -a www/sites/default/settings.php > /dev/null
